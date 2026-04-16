@@ -1,0 +1,16 @@
+module sp_ram(
+		input we,en,
+		input [3:0]addr,
+		inout [7:0]data
+);
+
+	reg [7:0]mem[15:0];
+	
+	always@(we,en,data,addr)
+		if(we && !en) mem[addr] = data;
+		
+		
+	assign data = (!we && en)? mem[addr]:8'bzz;
+		
+
+endmodule

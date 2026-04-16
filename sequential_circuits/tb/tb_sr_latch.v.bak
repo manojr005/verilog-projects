@@ -1,0 +1,25 @@
+module tb_sr_latch();
+reg s,r,en;
+wire q,q_bar;
+
+sr_latch s1(s,r,en,q,q_bar);
+
+initial 
+begin
+	$monitor("s= %b r =%b en =%b q =%b q_bar =%b",s,r,en,q,q_bar);
+	{s,r,en}=1'b0;
+	#1;
+	en =1'b1;
+	{s,r}=2'b00;
+	#2;
+	{s,r}=2'b01;
+	#2;
+	{s,r}=2'b10;
+	#2;
+	{s,r}=2'b11;
+	
+	
+
+end
+
+endmodule

@@ -1,0 +1,111 @@
+module tb_sp_ram;
+reg re,we;
+reg [3:0]addr;
+reg [7:0]temp;
+wire [7:0]data;
+integer i;
+
+sp_ram s1(.we(we),.en(re),.addr(addr),.data(data));
+
+//task to enable the write signal
+task write;
+	begin
+		we=1;
+		re=0;
+		
+	end
+endtask
+
+//task to enable the read signal
+task read;
+	begin
+		we=0;
+		re=1;
+		
+	end
+endtask
+
+//task to read the data in particular address
+
+task read_add(input [3:0]c);
+	begin
+		addr=c;
+	end
+endtask
+
+// task to write the data in the particular addresss
+task address(input [3:0]a,[7:0]b);
+	begin 
+		addr=a;
+		temp=b;
+		
+	end
+
+endtask
+
+task initilize; 
+	begin
+		{we,re,addr}=0;
+	end
+endtask
+
+
+
+
+task delay;
+	begin
+	#10;
+	end
+
+endtask
+
+assign data=(we && !re)? temp:8'bzz;
+
+
+initial 
+begin
+	$monitor("address =%b | temp = %b | data =%b |",addr,temp,data);
+	initilize;
+	delay;
+	
+	write;
+	address(5,26);
+	delay;
+
+	read;
+	read_add(5);
+	delay;
+
+	write;
+	address(15,77);
+	delay;
+
+	read;
+	read_add(15);
+	delay;
+
+	write;
+	address(2,44);
+	delay;
+
+	read;
+	read_add(2);
+	delay;
+	
+
+	write;
+	address(6,23);
+	delay;
+
+	read;
+	read_add(6);
+	delay;
+	initilize;
+	
+
+//	address(5,26);
+	
+
+end
+
+endmodule

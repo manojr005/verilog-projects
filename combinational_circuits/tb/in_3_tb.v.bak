@@ -1,0 +1,40 @@
+module in_3_tb;
+ reg [2:0]in;
+wire sum, carry;
+integer a;
+full_adder DUT(in[0],in[1],in[2], sum, carry);
+
+task initialize; 
+	begin
+	in = 3'b000;
+	end 
+endtask
+
+task data(input [2:0]in );
+	begin
+	in = in;
+	end
+
+endtask
+
+initial 
+begin
+	initialize;
+	$display(" a=%b b=%b c=%b sum=%b carry=%b",in[0],in[1],in[2],sum,carry);
+	for(a =0; a<8; a=a+1)
+		begin
+		in = a;
+#2;
+		end
+
+	
+
+data(3'b010);
+#2;
+data(3'b111);
+
+end
+
+
+
+endmodule 

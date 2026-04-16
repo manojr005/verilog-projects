@@ -1,0 +1,108 @@
+module tb_sp_ram;
+reg re,we,clk,rst;
+reg [3:0]w_addr,r_addr;
+reg [7:0]data_in;
+wire [7:0]data_out;
+integer i;
+
+dp_ram d1(
+	.we(we),
+	.re(re),
+	.clk(clk),
+	.rst(rst),
+	.r_add(r_addr),
+	.w_add(w_addr),
+	.data_in(data_in),
+	.data_out(data_out)
+	);
+
+initial forever #5 clk = ~clk;
+
+//task to enable the write signal
+task write;
+	begin
+		we=1;
+		
+	end
+endtask
+
+//task to enable the read signal
+task read;
+	begin
+		
+		re=1;
+		
+	end
+endtask
+
+//task to read the data in particular address
+
+task read_add(input [3:0]c);
+	begin
+		r_addr=c;
+	end
+endtask
+
+// task to write the data in the particular addresss
+task write_add(input [3:0]a,[7:0]b);
+	begin 
+		w_addr=a;
+		data_in=b;
+	end
+
+endtask
+
+task initilize; 
+	begin
+		{we,re,w_addr,r_addr,clk,rst}=0;
+	end
+endtask
+
+task delay;
+	begin
+	#10;
+	end
+
+endtask
+
+initial 
+begin
+	
+	initilize;
+	delay;
+	
+	write;
+	write_add(5,26);
+	delay;
+
+	write;
+	write_add(15,77);
+	read;
+	read_add(5);
+	delay;
+
+	write;
+	write_add(2,44);
+	read;
+	read_add(15);
+	delay;
+	
+
+	write;
+	write_add(6,23);
+	read;
+	read_add(2);
+	delay;
+	
+	read;
+	read_add(2);
+	delay;
+	initilize;
+	
+
+//	address(5,26);
+	
+
+end
+
+endmodule

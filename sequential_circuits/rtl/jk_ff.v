@@ -1,0 +1,28 @@
+module jk_ff(
+input j,k,clk,
+output reg q,
+output q_bar
+);
+
+
+
+parameter 
+	HOLD   = 2'B00,
+	RESET  = 2'B01,
+	SET    = 2'B10,
+	TOGGLE = 2'B11;
+	
+
+always@(posedge clk)
+	begin 
+		case({j,k})
+			HOLD:  q <= q;
+			SET:   q <= 1'b1;
+			RESET: q <= 1'b0;
+			TOGGLE:q <= ~q;
+		endcase
+	end
+	
+assign q_bar = ~q;
+
+endmodule

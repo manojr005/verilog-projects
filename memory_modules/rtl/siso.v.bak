@@ -1,0 +1,16 @@
+module siso(
+	input clk,rst,si,
+	output so
+);
+
+	reg [3:0]tem;  // the temp is to store and shift the value in the register before output and input
+	
+	always@(posedge clk or negedge rst)
+		begin
+			if(!rst) tem <= 4'b0000;
+			else 
+				tem <= {si,tem[3:1]}; // the 3,2,1 bit will be the previos value of the tem and the lsb 0 is the serial input bit
+		end
+assign so = tem[0];
+
+endmodule

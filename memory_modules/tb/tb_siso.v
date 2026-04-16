@@ -1,0 +1,47 @@
+module tb_siso();
+	reg clk,rst,si;
+	wire so;
+	
+siso s1(clk,rst,si,so);
+	
+task initilize;
+	begin 
+		{clk,rst,si}=3'b010;
+	end
+endtask
+
+task data(input a);
+	si = a;
+endtask
+
+always #5 clk = ~clk;
+
+initial 
+	begin 
+	initilize;
+	$monitor($time,"  rst = %b |si = %b | so = %b | clk = %b",rst,si,so,clk);
+	#10;
+	rst =0;
+	#20;
+	rst =1;
+	data(1);
+	#10;
+	data(1);
+	#10;
+	data(0);
+	#10;
+	data(1);
+	#10;
+	data(1);
+	#10;
+	data(0);
+	#10;
+	data(0);
+	#10;
+	data(1);
+	#10;
+	
+	#200 $finish;
+	end
+
+endmodule

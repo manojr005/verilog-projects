@@ -1,0 +1,39 @@
+module tb_ripple_adder;
+reg [3:0]a,b;
+reg c;
+wire [3:0]sum,carry;
+
+ripple_adder(.a(a),.b(b),.cin(c),.sum(sum),.carry(carry));
+
+task initialize;
+	begin
+	a=4'b0000;
+	b=4'b0000;
+	end
+endtask
+
+task data(input [3:0]a,[3:0]b,c);
+	begin
+	a=a;
+	b=b;
+	c=c;
+	end
+endtask
+
+initial 
+	begin 
+	initialize;
+	
+	data(4'b0101,4'b0010,1'b0);
+	#2;
+	data(4'b1010,4'b0101,1'b1);
+	#2;
+	data(4'b0001,4'b1001,1'b0);
+	#2;
+	data(4'b0111,4'b1111,1'b1);
+	
+	$monitor("a = %b (%d) b = %b (%d) sum = %b (%d) carry = %b (%d)",a[3:0],a[3:0],b[3:0],b[3:0],sum[3:0],sum[3:0],carry[3:0],carry[3:0]);
+	
+	end
+
+endmodule

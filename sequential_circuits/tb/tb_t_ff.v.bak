@@ -1,0 +1,20 @@
+module tb_t_ff();
+reg d,clk;
+wire q,q_bar;
+
+t_ff t1(d,clk,q,q_bar);
+always #5 clk = ~clk;
+
+initial
+begin 
+	clk =0;
+	d=0;
+	$monitor($time," d =%b q= %b q_bar =%b",d,q,q_bar);
+	while(1)
+	begin
+		#12; 
+		d = ~d;
+	end
+end
+
+endmodule

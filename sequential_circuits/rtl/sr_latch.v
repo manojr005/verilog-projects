@@ -1,0 +1,13 @@
+module sr_latch(
+input s,r,en,
+output q,q_bar
+);
+
+wire w1,w2;
+
+and a1(w1,s,en);
+and a2(w2,r,en);
+nand n1(q,w2,q_bar);
+nand n2(q_bar,w1,q);
+
+endmodule

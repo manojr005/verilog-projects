@@ -1,0 +1,50 @@
+
+// tri state buffer
+module tri_state(
+input d, en,
+output y
+);
+
+assign y=en ? d: 1'bz;
+
+endmodule
+
+
+// 2:4 decoder 
+
+module decoder_2_4(
+input [1:0] sel,
+output reg [3:0] out
+);
+
+always@(*)
+begin
+	
+	
+	case(sel)
+		2'b00: out = 4'b0001;
+		2'b01: out = 4'b0010;
+		2'b10: out = 4'b0100;
+		2'b11: out = 4'b1000;
+	endcase
+
+end
+
+endmodule
+
+// 4:1 mux using 4:2 decoder and the tri_state buffer
+
+module decoder_mux(
+input [3:0]data,
+input [1:0]sel,
+output y
+);
+
+wire [3:0]d;
+decoder_2_4 d1(sel,data);
+tri_state t1(data[0],d[0],y);
+tri_state t2(data[1],d[1],y);
+tri_state t3(data[2],d[2],y);
+tri_state t4(data[3],d[3],y);
+
+endmodule

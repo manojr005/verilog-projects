@@ -1,0 +1,53 @@
+module tb_ud_load_counter();
+reg clk,rst,l,down;
+reg[3:0]a;
+wire [3:0]out;
+
+ud_load_counter c1(
+		.clk(clk),
+		.rst(rst),
+		.load(l),
+		.b(a),
+		.down(down),
+		.a(out));
+
+initial forever #2 clk = ~clk;
+
+task load(input c, [3:0]b);
+	begin
+	l=c;  // its the load signal
+	a=b; // the 4 bit value to load
+	
+	end
+endtask
+
+task initilize;
+	begin 
+	{rst,clk,down}=1'b0;
+	end
+endtask
+
+initial begin
+	$monitor($time," |clk =%b |rst =%b |load = %b | value =%b  |out =%b ",clk,rst,l,a,out);
+	initilize;
+	#10;
+	rst = 1; //reset at high in intilize and reset low after 10 time unit
+	#10;
+	load(1,4'b0001);  // loading the value 
+	#4;
+	l=0;
+	down =1;    // making the down signal as high
+	#50;
+	load(1,4'b0110);
+	#4;
+	l=0;
+	#10;
+	down =0;
+	#4;
+	load(1,4'b0111);
+	#4;
+	l=0;
+	
+end
+
+endmodule

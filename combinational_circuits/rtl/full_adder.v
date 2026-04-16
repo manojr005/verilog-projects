@@ -1,0 +1,12 @@
+module full_adder(input a,b,c, output sum,carry);
+wire s1,c1,c2;
+	half_adder h1(a,b,s1,c1);
+	half_adder h2(s1,c,sum,c2);
+	 or a1(carry,c1,c2);
+endmodule
+
+module half_adder(input a,b, output sum,co);
+	assign sum = a^b;
+	assign co = a&b;
+	
+endmodule
