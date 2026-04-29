@@ -1,0 +1,64 @@
+/**********************************************************************
+The input is give as coin of one rupee or two rupee the output gives product
+for 3 rupee andd product + 1 as change for 2 two rupee (4) 
+***********************************************************************/
+
+module vending(in,clk,rst,out,change);
+	input clk,rst;
+	input [1:0]in;
+	output reg out, change;
+	parameter S0 = 3'd0,
+	S1 = 3'd1,
+	S2 = 3'd2,
+	S3 = 3'd3,
+	S4 = 3'd4;
+		
+	reg [2:0]ps,ns;
+	
+	always @(posedge clk or posedge rst)
+	begin
+		if(rst) ps <= S0;
+		else ps <= ns;
+	end
+	
+	always @(*)
+	begin 
+		ns = S0;
+		
+		case (ps)
+			S0: begin
+				ns = S0;
+				case(in)
+					2'b01: ns = S1;
+					2'b10: ns = S2;
+				endcase
+				end
+			S1: begin
+				ns = S1;
+				case(in)
+					2'b01: ns = S2;
+					2'b10: ns = S3;
+				endcase
+				end
+			
+			S2: begin
+				ns = S2;
+				case(in)
+					2'b01: ns = S3;
+					2'b10: ns = S4;
+				endcase
+				end
+			S3: ns = S0;
+			
+			S4: ns = S0;
+		endcase 
+	end
+	
+	always @(posedge clk or posedge rst)
+	begin 
+		if(rst) {out, change} = 2'b00;
+		else if(ps == S3) {out, change} = 2'b01;
+		else if(ps == S4) {out, change} = 2'b11;
+		else {out, change} = 2'b00;
+	end
+endmodule

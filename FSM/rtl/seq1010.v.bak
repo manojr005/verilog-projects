@@ -1,0 +1,41 @@
+/*************************************************************************************
+it is to detect the 1010 sequence with overlapping and MSB as a first bit
+
+****************************************************************************************/
+module seq1010(in,clk,rst,out);
+	input clk,rst,in;
+	output reg out;
+	
+	parameter S0 = 3'd0,
+	S1 = 3'd1,
+	S2 = 3'd2,
+	S3 = 3'd3,
+	S4 = 3'd4;
+	
+	reg [1:0]ns,ps;
+	
+	always @(posedge clk or posedge rst)
+	begin
+		if(rst) ps = S0;
+		else ps = ns;
+	end
+	
+	always@(*)
+	begin 
+		ns = S0;
+		
+		case(ps)
+			S0: ns = (in) ? S1:S0;
+			S1: ns = (!in) ? S2:S1;
+			S2: ns = (in) ? S3:S0;
+			S3: ns = (!in) ? S4:S1;
+			S4: ns = (in) ? S3:S2;
+		endcase
+	end
+
+	always@(posedge clk or posedge rst)
+	begin
+		if(rst) out = 1'b0;
+		else out = (ps == S4);
+	end
+endmodule
