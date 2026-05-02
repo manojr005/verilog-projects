@@ -1,0 +1,87 @@
+`timescale 1ns/1ps
+
+module tb_dp_ram_dclk();
+
+	reg clk1,clk2,rst,we,re;
+	reg [7:0] din;
+	wire [7:0] dout;
+	wire empty,full;
+
+
+dp_ram_dclk d1(clk1,clk2,rst,we,re,din,dout,full,empty);
+
+always #50 clk1 = ~clk1;
+always #100 clk2 = ~clk2;
+
+
+initial clk1 =0;
+initial clk2 =0;
+
+task initilize;
+	begin 
+		{rst,we,re}=3'b000;
+	end
+endtask
+
+task write( input [7:0]a);
+	begin
+		if(!full)
+		begin
+			@(negedge clk1)
+				begin
+					din = a;
+					we =1;
+				end
+			@(negedge clk1)
+				begin
+					we =0;
+				end
+		end
+	end
+endtask
+
+task read;
+	begin 
+	if(!empty) 
+		begin
+			@(negedge clk2)
+				begin
+					re =1;
+				end
+			@(negedge clk2)
+				begin
+					re =0;
+				end
+		end
+	end
+endtask
+
+integer i,j;
+
+initial  // initial block for writing data
+begin
+
+	$monitor($time," | we =%b | re =%b | d_in = %b | wp = %b| d_out = %b | rp = %b | full = %b | empty = %b",we,re,din,d1.wp,dout,d1.rp,full,empty);
+	initilize;
+	rst = 1;
+	#10;
+	rst =0;
+	
+	#100;
+	//we =1;
+	for(i=0;i<70;i=i+1)
+	begin
+		write(i+50);
+	end
+	
+end
+
+
+initial  // initial block for reading data
+begin
+	#110;
+	re =1;;
+end
+
+
+endmodule
