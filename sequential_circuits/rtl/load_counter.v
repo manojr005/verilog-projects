@@ -5,8 +5,8 @@ module load_counter(
 
 always@(posedge clk or negedge rst)
 begin
-	if(!rst) a=4'b0000;
-	else if(load) a = b;
-	else a = a+1;
+	if(!rst) a<=4'b0000;
+	else if(load) a <= b;
+	else a <= a+1;
 end
 endmodule
