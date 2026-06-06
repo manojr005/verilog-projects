@@ -5,8 +5,8 @@ module mod_load_counter(
 
 always@(posedge clk or negedge rst)
 begin
-	if(!rst | a==4'b1011) a=4'b0000; // counter will go to 0 when reset is 0 or count value is 12
-	else if(load) a = b;
-	else a = a+1;
+	if(!rst | a==4'b1011) a<=4'b0000; // counter will go to 0 when reset is 0 or count value is 12
+	else if(load) a <= b;
+	else a <= a+1;
 end
 endmodule
